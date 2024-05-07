@@ -1,0 +1,21 @@
+.reactTimeSelect {
+    border: none;
+    background-color: #fff;
+    border-radius: .375rem;
+    /* 6px */
+    padding: 5px;
+    padding-left: 2em;
+    padding-right: 2em;
+    /* 8px */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.reactTimeSelect:active,
+.reactTimeSelect:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.react-time-picker__inputGroup {
+    font-size: .875rem;
+    /* 14px */
+}
