@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
 
     return (
         <nav className="absolute w-full z-20 bg-white border-gray-200 dark:bg-gray-900">
-        {/* // <nav className="fixed w-full z-20 bg-white border-gray-200 dark:bg-gray-900"> */}
+            {/* // <nav className="fixed w-full z-20 bg-white border-gray-200 dark:bg-gray-900"> */}
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                 <a href="" className="flex items-center">
                     {/* <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Logo" /> */}
@@ -27,7 +28,7 @@ const Navbar = () => {
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                         <li className="p-2 text-green-500 hover:bg-green-700 rounded-md hover:shadow-lg hover:text-white">
-                            <a href="/_profile/profile-demo" className="block py-2 pl-3 pr-4 bg-green-700 rounded md:bg-transparent hover:text-white  md:p-0" aria-current="page">Profile</a>
+                            <Link href="/_profile/profile-demo" className="block py-2 pl-3 pr-4 bg-green-700 rounded md:bg-transparent hover:text-white  md:p-0" aria-current="page">Profile</Link>
                         </li>
                     </ul>
                 </div>
