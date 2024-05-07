@@ -20,7 +20,7 @@ const ClockIn = () => {
 
         const fetchCurrentUser = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
+                const res = await axios.get(`api/user/fetch-cuser`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const ClockIn = () => {
 
         const fetchOrganizationClock = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-clock`, {
+                const res = await axios.get(`api/user/get-clock`, {
                     withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ const ClockIn = () => {
                 console.log(error);
             }
         };
-        
+
 
         fetchCurrentUser();
         fetchOrganizationClock();
@@ -61,6 +61,9 @@ const ClockIn = () => {
     }, []);
 
     const clockIn = async () => {
+        setErrorMessage('');
+        setResponseMessage('');
+        
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const userLocation = [position.coords.latitude, position.coords.longitude];
@@ -69,7 +72,7 @@ const ClockIn = () => {
                     userPosition: userLocation,
                 };
                 try {
-                    const res = await axios.post(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/clock-in`, body, {
+                    const res = await axios.post(`api/user/clock-in`, body, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${token}`

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import Image from 'next/image'
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -15,15 +14,13 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/login`, {
+      const res = await fetch(`api/user/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-cors-api-key': 'temp_38be81f48417df120d85ea6174df96f7'
         },
 
         body: JSON.stringify({ email, password }),
-        credentials: 'include'
       });
 
       if (res.status === 401) {
@@ -33,10 +30,13 @@ export default function Login() {
 
       const data = await res.json();
 
+      console.log(data)
+
       if (data.auth) {
         setToken(data.token);
         window.location.href = '/clock-in';
       } else {
+
         setError('Something went wrong. Please try again');
       }
     } catch (error) {
