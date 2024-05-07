@@ -35,7 +35,7 @@ function Mapper() {
 
 
   const sendDataToApi = async () => {
-    const url = "http://localhost:5001/api/client/add-location-mod";
+    const url = "api/client/add-location";
     console.log(newOrganizationLocation)
     const data = {
       organizationLocation: newOrganizationLocation,

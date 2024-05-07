@@ -30,8 +30,6 @@ export default function Login() {
 
       const data = await res.json();
 
-      console.log(data)
-
       if (data.auth) {
         setToken(data.token);
         window.location.href = '/clock-in';

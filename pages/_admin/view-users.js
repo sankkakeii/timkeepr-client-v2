@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
@@ -8,21 +6,22 @@ export default function UserList() {
 
     useEffect(() => {
         const fetchUsers = async () => {
-            // Get the token from the cookie
-            const token = Cookies.get('token');
-
             try {
-                const res = await axios.get('http://localhost:5001/api/client/view-users', {
+                const token = localStorage.getItem('time-token');
+                const res = await fetch('../api/client/view-users', {
+                    method: 'GET',
                     headers: { Authorization: `Bearer ${token}` },
-                    withCredentials: true
                 });
 
-                setUsers(res.data);
-            } catch (error) {
-                if (error.response && error.response.status >= 400 && error.response.status < 500) {
-                    setErrorMessage('An error occurred. Please try again');
-                    console.log(error);
+                if (!res.ok) {
+                    throw new Error('Failed to fetch users');
                 }
+
+                const data = await res.json();
+                setUsers(data);
+            } catch (error) {
+                setErrorMessage('An error occurred. Please try again');
+                console.error(error);
             }
         };
 

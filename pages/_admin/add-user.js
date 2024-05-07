@@ -1,6 +1,4 @@
 import { useState } from 'react';
-import Cookies from 'js-cookie';
-import axios from 'axios';
 
 export default function AddUser() {
     const [formState, setFormState] = useState({
@@ -22,18 +20,28 @@ export default function AddUser() {
     const handleFormSubmit = async (event) => {
         event.preventDefault();
 
-        // Get the token from the cookie
-        const token = Cookies.get('token');
+        // Get the token
+        const token = localStorage.getItem('time-token');
+        let companyId = localStorage.getItem('companyId');
 
-        const url = `http://localhost:5001/api/client/add-user`;
         const data = formState;
+        data.companyId = companyId;
+        data.token = token;
 
         try {
             // Pass the token in the Authorization header
-            await axios.post(url, data, {
-                headers: { Authorization: `Bearer ${token}` },
-                withCredentials: true
+            const response = await fetch(`../api/client/add-user`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(data),
             });
+
+            if (!response.ok) {
+                throw new Error('Failed to add user');
+            }
 
             console.log('User added successfully');
         } catch (error) {
@@ -43,6 +51,7 @@ export default function AddUser() {
             }
         }
     };
+
 
     return (
         <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">

@@ -7,14 +7,16 @@ export default async function handler(req, res) {
 
     const { email, password } = req.body;
 
+    console.log(email, password);
+
     try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/login`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}client/login`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'x-cors-api-key': 'temp_38be81f48417df120d85ea6174df96f7'
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email, password }),
+            credentials: 'include', // necessary to include cookies with the request
+            body: JSON.stringify({ email, password })
         });
 
         if (response.status === 401) {
@@ -24,13 +26,12 @@ export default async function handler(req, res) {
         const data = await response.json();
 
         if (data.auth) {
+            res.setHeader('Set-Cookie', `token=${data.token}; Path=/`);
             return res.status(200).json(data);
         } else {
-            console.log('Something went wrong. Please try again');
             return res.status(400).json({ error: 'Something went wrong. Please try again' });
         }
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ error: 'An error occurred. Please try again' });
     }
 }

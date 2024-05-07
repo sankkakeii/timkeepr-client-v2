@@ -63,7 +63,7 @@ const ClockIn = () => {
     const clockIn = async () => {
         setErrorMessage('');
         setResponseMessage('');
-        
+
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const userLocation = [position.coords.latitude, position.coords.longitude];
