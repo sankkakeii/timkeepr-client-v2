@@ -14,7 +14,6 @@ export default function Login() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
-                credentials: 'include' // necessary to include cookies with the request
             });
 
             if (res.status === 401) {
@@ -23,7 +22,6 @@ export default function Login() {
             }
 
             const data = await res.json();
-            console.log(data)
 
             if (data.auth) {
                 localStorage.setItem('time-token', data.token);

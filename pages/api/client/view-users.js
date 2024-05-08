@@ -9,6 +9,8 @@ export default async function handler(req, res) {
         // Get the token
         const token = req.headers.authorization.replace('Bearer ', '');
 
+        console.log(token);
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}client/view-users`, {
             method: 'GET',
             headers: {

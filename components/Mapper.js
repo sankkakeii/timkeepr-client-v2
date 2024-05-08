@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import { GoogleMap, LoadScript, Marker, Circle } from "@react-google-maps/api";
 import TimePicker from 'react-time-picker';
 import 'react-time-picker/dist/TimePicker.css';
-import axios from "axios";
 import { LIBRARIES } from "../utils/utils";
-import Cookies from 'js-cookie';
 
 function Mapper() {
   const [center, setCenter] = useState(null);
@@ -35,34 +33,48 @@ function Mapper() {
 
 
   const sendDataToApi = async () => {
-    const url = "api/client/add-location";
-    console.log(newOrganizationLocation)
+    const url = "../api/client/add-location";
+    // Get the token from the cookie
+    const token = localStorage.getItem('time-token');
+    const companyId = localStorage.getItem('companyId');
+
+    console.log(newOrganizationLocation);
     const data = {
       organizationLocation: newOrganizationLocation,
       // clockInTime: timeValue + ':00',
       clockInTime: timeValue,
       radius: radius,
-      companyId: ''
+      companyId: companyId,
+      token: token
     };
 
-    // Get the token from the cookie
-    const token = Cookies.get('token');
 
-    console.log(token)
-    console.log(data)
 
     try {
       // Pass the token in the Authorization header
-      await axios.post(url, data, {
-        headers: { Authorization: `Bearer ${token}` },
-        withCredentials: true
+      let response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
       });
+
+      if (!response.ok) {
+        throw new Error('Failed to send data to API');
+      } else {
+        console.log('Data sent successfully');
+      }
+
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         console.log(error);
       }
     }
+
   };
+
 
 
   const handleRadiusChange = (event) => {
@@ -106,10 +118,10 @@ function Mapper() {
           <Circle
             center={center}
             options={{
-              strokeColor: "#00FF00",
+              strokeColor: "#4ce24c",
               strokeOpacity: 0.8,
               strokeWeight: 1.5,
-              fillColor: " #00FF00",
+              fillColor: " #46dd46",
               fillOpacity: 0.35,
               clickable: true,
               draggable: true,
