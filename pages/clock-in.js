@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Spinner from '../components/spinner';
 
 const ClockIn = () => {
     const [currentTime, setCurrentTime] = useState(null);
@@ -10,6 +11,8 @@ const ClockIn = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
     const [token, setToken] = useState('');
+    const [clockInLoading, setClockInLoading] = useState(false);
+    const [clockOutLoading, setClockOutLoading] = useState(false);
 
     useEffect(() => {
         setCurrentTime(new Date().toLocaleTimeString());
@@ -63,6 +66,7 @@ const ClockIn = () => {
     const clockIn = async () => {
         setErrorMessage('');
         setResponseMessage('');
+        setClockInLoading(true);
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(async (position) => {
@@ -89,10 +93,45 @@ const ClockIn = () => {
                 } catch (error) {
                     setErrorMessage('An error occurred. Please try again');
                     console.error(error);
+                } finally {
+                    setClockInLoading(false);
                 }
             });
         } else {
             setErrorMessage("Geolocation is not supported by this browser.");
+            setClockInLoading(false);
+        }
+    };
+
+    const clockOut = async () => {
+        setErrorMessage('');
+        setResponseMessage('');
+        setClockOutLoading(true);
+
+        try {
+            const body = {
+                email: userEmail,
+            };
+
+            const res = await axios.post(`api/user/clock-out`, body, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                withCredentials: true
+            });
+            if (!res.data) {
+                console.error("Response data is not found");
+                setErrorMessage('Response data is not found');
+                return;
+            }
+            setResponseMessage(res.data.message);
+            console.log(res.data.message);
+        } catch (error) {
+            setErrorMessage('An error occurred. Please try again');
+            console.error(error);
+        } finally {
+            setClockOutLoading(false);
         }
     };
 
@@ -107,11 +146,16 @@ const ClockIn = () => {
                     <div className="text-3xl font-bold text-gray-800 mb-4">{userName}</div>
                     {currentTime && <div className="text-xl font-semibold text-gray-600 mb-2">{`Current Time: ${currentTime}`}</div>}
                     {orgClockinTime && <div className="text-xl font-semibold text-gray-600 mb-2">{`Clock In Time: ${orgClockinTime}`}</div>}
-                    {responseMessage && <div className="text-lg text-center font-semibold text-green-600 mb-2">{responseMessage}</div>}
-                    {errorMessage && <p className="text-red-500 text-center">{errorMessage}</p>}
-                    <button onClick={clockIn} className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">
-                        Clock In
-                    </button>
+                    {responseMessage && <div className="text-lg text-center font-semibold text-green-600 my-3">{responseMessage}</div>}
+                    {errorMessage && <p className="text-red-500 text-center my-3">{errorMessage}</p>}
+                    <div className="mt-5 w-1/2">
+                        <button onClick={clockIn} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${clockInLoading ? 'pointer-events-none disabled' : ''}`}>
+                            {clockInLoading ? <Spinner /> : "Clock In"}
+                        </button>
+                        <button onClick={clockOut} className={`mt-3 bg-red-500 hover:bg-red-700 w-full rounded-lg text-white font-medium py-2 ${clockOutLoading ? 'pointer-events-none disabled' : ''}`}>
+                            {clockOutLoading ? <Spinner /> : "Clock Out"}
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -119,26 +163,3 @@ const ClockIn = () => {
 };
 
 export default ClockIn;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
