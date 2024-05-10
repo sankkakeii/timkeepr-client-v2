@@ -89,7 +89,6 @@ const ClockIn = () => {
                         return;
                     }
                     setResponseMessage(res.data.message);
-                    console.log(res.data.message);
                 } catch (error) {
                     setErrorMessage('An error occurred. Please try again');
                     console.error(error);
@@ -126,7 +125,6 @@ const ClockIn = () => {
                 return;
             }
             setResponseMessage(res.data.message);
-            console.log(res.data.message);
         } catch (error) {
             setErrorMessage('An error occurred. Please try again');
             console.error(error);
