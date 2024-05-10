@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
+import Spinner from '../components/spinner';
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [token , setToken] = useState('');
+  const [token, setToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('time-token', token);
@@ -12,6 +15,7 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading state to true when form is submitted
 
     try {
       const res = await fetch(`api/user/login`, {
@@ -19,12 +23,12 @@ export default function Login() {
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({ email, password }),
       });
 
       if (res.status === 401) {
         setError('Unauthorized access. Please check your credentials');
+        setLoading(false); // Set loading state to false after response is received
         return;
       }
 
@@ -34,21 +38,14 @@ export default function Login() {
         setToken(data.token);
         window.location.href = '/clock-in';
       } else {
-
         setError('Something went wrong. Please try again');
+        setLoading(false); // Set loading state to false after response is received
       }
     } catch (error) {
       setError('An error occurred. Please try again');
+      setLoading(false); // Set loading state to false after response is received
     }
   };
-
-
-
-
-
-
-
-
 
   return (
     <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
@@ -77,11 +74,12 @@ export default function Login() {
               <a href="#" className="text-sm text-green-500 hover:underline">Forgot password?</a>
             </div>
             {error && <p className="text-red-500">{error}</p>}
-            <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">Sign in</button>
+            <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">
+              {loading ? <Spinner /> : 'Sign in'} {/* Show spinner if loading state is true */}
+            </button>
           </form>
         </div>
       </div>
     </main>
   )
 }
-

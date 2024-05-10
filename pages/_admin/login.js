@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import Spinner from '../../components/spinner';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
 
         try {
             const res = await fetch(`../api/client/login`, {
@@ -18,20 +21,24 @@ export default function Login() {
 
             if (res.status === 401) {
                 setError('Unauthorized access. Please check your credentials');
+                setLoading(false);
                 return;
             }
 
             const data = await res.json();
 
             if (data.auth) {
+                setLoading(false);
                 localStorage.setItem('time-token', data.token);
                 localStorage.setItem('companyId', data.data._id);
                 window.location.href = '/_admin/settings';
             } else {
                 setError('Something went wrong. Please try again');
+                setLoading(false);
             }
         } catch (error) {
             setError('An error occurred. Please try again');
+            setLoading(false);
         }
     };
 
@@ -64,7 +71,9 @@ export default function Login() {
                             <a href="#" className="text-sm text-green-500 hover:underline">Forgot password?</a>
                         </div>
                         {error && <p className="text-red-500">{error}</p>}
-                        <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">Sign in</button>
+                        <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">
+                            {loading ? <Spinner /> : 'Sign in'}
+                        </button>
                     </form>
                 </div>
             </div>
