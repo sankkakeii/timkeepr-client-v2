@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Spinner from '../../components/spinner';
 
 export default function AddUser() {
     const [formState, setFormState] = useState({
@@ -8,6 +9,7 @@ export default function AddUser() {
         phone: '',
     });
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleInputChange = (event) => {
         setFormState({
@@ -19,6 +21,7 @@ export default function AddUser() {
 
     const handleFormSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         // Get the token
         const token = localStorage.getItem('time-token');
@@ -40,14 +43,18 @@ export default function AddUser() {
             });
 
             if (!response.ok) {
+                setLoading(false);
                 throw new Error('Failed to add user');
             }
 
             console.log('User added successfully');
+            setLoading(false);
+
         } catch (error) {
             if (error.response && error.response.status >= 400 && error.response.status < 500) {
                 setErrorMessage('An error occurred. Please try again');
                 console.log(error);
+                setLoading(false);
             }
         }
     };
@@ -81,7 +88,11 @@ export default function AddUser() {
                             <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-700">Phone</label>
                             <input type="tel" name="phone" id="phone" onChange={handleInputChange} className="border border-gray-300 rounded-lg focus:border-green-500 w-full px-4 py-2" required="" />
                         </div>
-                        <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">Add User</button>
+
+                        {/* <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">Add User</button> */}
+                        <button type="submit" className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${loading ? 'pointer-events-none disabled' : ''}`}>
+                            {loading ? <Spinner /> : "Add User"}
+                        </button>
                     </form>
                 </div>
             </div>
