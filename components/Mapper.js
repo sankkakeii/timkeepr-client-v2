@@ -3,12 +3,14 @@ import { GoogleMap, LoadScript, Marker, Circle } from "@react-google-maps/api";
 import TimePicker from 'react-time-picker';
 import 'react-time-picker/dist/TimePicker.css';
 import { LIBRARIES } from "../utils/utils";
+import Spinner from "./spinner";
 
 function Mapper() {
   const [center, setCenter] = useState(null);
   const [radius, setRadius] = useState(50);
   const [timeValue, setTimeValue] = useState('00:00');
   const [newOrganizationLocation, setNewOrganizationLocation] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let watcher = null;
@@ -51,6 +53,7 @@ function Mapper() {
 
 
     try {
+      setLoading(true);
       // Pass the token in the Authorization header
       let response = await fetch(url, {
         method: 'POST',
@@ -63,13 +66,16 @@ function Mapper() {
 
       if (!response.ok) {
         throw new Error('Failed to send data to API');
+        setLoading(false);
       } else {
         console.log('Data sent successfully');
+        setLoading(false);
       }
 
     } catch (error) {
       if (error.response && error.response.status >= 400 && error.response.status < 500) {
         console.log(error);
+        setLoading(false);
       }
     }
 
@@ -111,7 +117,9 @@ function Mapper() {
             onChange={handleTimeChange}
             value={timeValue}
           />
-          <button onClick={sendDataToApi} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+          <button onClick={sendDataToApi} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${loading ? 'pointer-events-none disabled' : ''}`}>
+            {loading ? <Spinner /> : "Submit"}
+          </button>
         </div>
         <GoogleMap mapContainerStyle={{ width: "400px", height: "220px" }} center={center} zoom={18} className="rounded">
           <Marker position={center} />
