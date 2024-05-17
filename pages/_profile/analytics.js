@@ -44,13 +44,12 @@ export default function Analytics() {
         const token = localStorage.getItem('time-token');
 
         try {
-            const res = await fetch(`../api/user/get-clockin-data`, {
+            const res = await fetch(`../api/user/get-clock-in-data`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                credentials: 'include',
                 body: JSON.stringify({ email }),
             });
 
