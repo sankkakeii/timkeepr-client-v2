@@ -37,7 +37,7 @@ export default function Analytics() {
         };
 
         const fetchClockInData = async () => {
-            let email = user.Email;
+            let email = user.email;
             try {
                 const res = await fetch(`../api/user/get-clockin-data`, {
                     method: 'POST',
