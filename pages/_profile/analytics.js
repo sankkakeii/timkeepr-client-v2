@@ -62,33 +62,6 @@ export default function Analytics() {
         }
     };
 
-    // const fetchClockInData = async () => {
-    //     const email = user.email;
-    //     const token = localStorage.getItem('time-token');
-
-    //     try {
-    //         const res = await fetch(`../api/user/get-clock-in-data`, {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 'Authorization': `Bearer ${token}`
-    //             },
-    //             body: JSON.stringify({ email }),
-    //         });
-
-    //         if (!res.ok) {
-    //             throw new Error('An error occurred. Please try again');
-    //         }
-
-    //         const data = await res.json();
-
-    //         console.log(data)
-    //         setClockInData(data);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
     const handleLogOut = () => {
         Cookies.remove('token');
         router.push('/');
