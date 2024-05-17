@@ -29,7 +29,7 @@ export default function Analytics() {
 
                 const data = await res.json();
 
-                console.log(data)
+                console.log(data.email)
                 setUser(data);
             } catch (error) {
                 console.error(error);
