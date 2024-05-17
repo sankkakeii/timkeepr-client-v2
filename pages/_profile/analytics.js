@@ -48,7 +48,7 @@ export default function Analytics() {
     return (
         <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-            <div className="relative rounded-xl shadow-2xl overflow-hidden w-full max-w-md">
+            <div className="relative rounded-xl shadow-2xl overflow-hidden w-full max-w-xl">
                 <div className="flex flex-col items-center justify-center py-8 px-6 bg-white sm:rounded-3xl sm:p-20">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Timekeepr</h2>
                     <h1 className="text-2xl font-semibold text-gray-800 mb-4">Analytics</h1>
