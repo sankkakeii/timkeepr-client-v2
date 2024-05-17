@@ -7,11 +7,24 @@ export default function UserProfile() {
     const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
+    const [token, setToken] = useState('');
 
     useEffect(() => {
+
+        const token = localStorage.getItem('time-token');
+        setToken(token);
         const fetchUser = async () => {
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
+                // const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
+                // });
+
+                const res = await fetch(`api/user/fetch-cuser`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include'
                 });
 
                 if (!res.ok) {
