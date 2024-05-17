@@ -42,7 +42,7 @@ export default function Analytics() {
     const fetchClockInData = async () => {
         const email = user.email;
         const token = localStorage.getItem('time-token');
-        console.log(email)
+        console.log(email, token)
 
         try {
             const res = await fetch(`../api/user/get-clock-in-data`, {
