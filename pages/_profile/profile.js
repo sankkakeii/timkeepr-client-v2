@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
-
 
 export default function UserProfile() {
     const [user, setUser] = useState(null);
@@ -10,51 +8,61 @@ export default function UserProfile() {
     const [errorMessage, setErrorMessage] = useState('');
     const router = useRouter();
 
-
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
-                    withCredentials: true
+                const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
+                    credentials: 'include',
                 });
 
-                setUser(res.data);
-                setEmail(res.data.email);
-            } catch (error) {
-                if (error.response && error.response.status >= 400 && error.response.status < 500) {
-                    setErrorMessage('An error occurred. Please try again');
-                    console.log(error);
+                if (!res.ok) {
+                    throw new Error('An error occurred. Please try again');
                 }
+
+                const data = await res.json();
+                setUser(data);
+                setEmail(data.email);
+            } catch (error) {
+                setErrorMessage(error.message);
+                console.log(error);
             }
         };
 
         fetchUser();
     }, []);
 
-
     const handleClockOut = async () => {
         const body = {
             email: email,
         };
-        console.log(body)
+        console.log(body);
 
         try {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/clock-out`, body, {
-                withCredentials: true
+            const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/clock-out`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(body),
             });
-            alert(res.data.message); // You can handle the response as you wish, e.g., show a notification
+
+            if (!res.ok) {
+                throw new Error('An error occurred while clocking out. Please try again.');
+            }
+
+            const data = await res.json();
+            alert(data.message); // You can handle the response as you wish, e.g., show a notification
         } catch (error) {
             console.error(error);
-            alert('An error occurred while clocking out. Please try again.');
+            alert(error.message);
         }
-    }
+    };
 
     const handleLogOut = () => {
         Cookies.remove('token');
         router.push('/');
-    }
-
-
+    };
 
     if (!user) {
         return <div>Loading</div>;
@@ -76,10 +84,8 @@ export default function UserProfile() {
                         <button className="bg-yellow-500 hover:bg-yellow-700 w-full rounded-lg text-white font-medium py-2">Analytics</button>
                         <button onClick={handleLogOut} className="bg-gray-500 hover:bg-gray-700 w-full rounded-lg text-white font-medium py-2">Logout</button>
                     </div>
-
                 </div>
             </div>
         </main>
     );
 }
-
