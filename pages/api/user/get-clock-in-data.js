@@ -30,7 +30,7 @@ export default async function handler(req, res) {
             return res.status(200).json(data);
         } else {
             console.log('Something went wrong. Please try again');
-            return res.status(400).json({ error: 'Something went wrong. Please try again' });
+            return res.status(400).json({ error: 'Something went wrong. Please try again', message: error });
         }
     } catch (error) {
         console.log(error)
