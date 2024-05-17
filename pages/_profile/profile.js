@@ -16,9 +16,6 @@ export default function UserProfile() {
 
         const fetchUser = async () => {
             try {
-                // const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
-                // });
-
                 const res = await fetch(`../api/user/fetch-cuser`, {
                     method: 'GET',
                     headers: {
