@@ -35,37 +35,37 @@ export default function Analytics() {
             }
         };
 
-        const fetchClockInData = async () => {
-            const email = user.email;
-            const token = localStorage.getItem('time-token');
-
-            try {
-                const res = await fetch(`../api/user/get-clockin-data`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    credentials: 'include',
-                    body: JSON.stringify({ email }),
-                });
-
-                if (!res.ok) {
-                    throw new Error('An error occurred. Please try again');
-                }
-
-                const data = await res.json();
-
-                console.log(data)
-                setClockInData(data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
         fetchUser();
-        // fetchClockInData();
     }, []);
+
+
+    const fetchClockInData = async () => {
+        const email = user.email;
+        const token = localStorage.getItem('time-token');
+
+        try {
+            const res = await fetch(`../api/user/get-clockin-data`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                credentials: 'include',
+                body: JSON.stringify({ email }),
+            });
+
+            if (!res.ok) {
+                throw new Error('An error occurred. Please try again');
+            }
+
+            const data = await res.json();
+
+            console.log(data)
+            setClockInData(data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const handleLogOut = () => {
         Cookies.remove('token');
@@ -83,6 +83,7 @@ export default function Analytics() {
                 <div className="flex flex-col items-center justify-center py-8 px-6 bg-white sm:rounded-3xl sm:p-20">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Timekeepr</h2>
                     <h1 className="text-2xl font-semibold text-gray-800 mb-4">Analytics</h1>
+                    <button onClick={fetchClockInData}>Refresh</button>
                     <table className="min-w-full bg-white">
                         <thead>
                             <tr>
