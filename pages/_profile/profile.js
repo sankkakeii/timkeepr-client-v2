@@ -94,7 +94,7 @@ export default function UserProfile() {
                     <div className="w-full flex flex-col space-y-4">
                         <button className="bg-blue-500 hover:bg-blue-700 w-full rounded-lg text-white font-medium py-2">Request Break</button>
                         <button onClick={handleClockOut} className="bg-red-500 hover:bg-red-700 w-full rounded-lg text-white font-medium py-2">Clock Out</button>
-                        <Link href='/analytics'>
+                        <Link href='/_profile/analytics'>
                             <button className="bg-yellow-500 hover:bg-yellow-700 w-full rounded-lg text-white font-medium py-2">Analytics</button>
                         </Link>
                         <button onClick={handleLogOut} className="bg-gray-500 hover:bg-gray-700 w-full rounded-lg text-white font-medium py-2">Logout</button>
