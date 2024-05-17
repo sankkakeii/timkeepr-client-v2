@@ -64,7 +64,7 @@ export default function Analytics() {
         };
 
         fetchUser();
-        fetchClockInData();
+        // fetchClockInData();
     }, []);
 
     const handleLogOut = () => {
