@@ -26,12 +26,12 @@ export default async function handler(req, res) {
 
         const data = await response.json();
 
-        if (data.auth) {
-            return res.status(200).json(data);
-        } else {
-            console.log('Something went wrong. Please try again');
-            return res.status(400).json({ error: 'Something went wrong. Please try again', message: error });
-        }
+    {
+      console.log("Something went wrong. Please try again");
+      return res
+        .status(400)
+        .json({ error: "Something went wrong. Please try again" });
+    }
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error: 'An error occurred. Please try again' });
