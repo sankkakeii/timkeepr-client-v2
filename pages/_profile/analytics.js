@@ -6,6 +6,7 @@ export default function Analytics() {
     const router = useRouter();
     const [user, setUser] = useState(null);
     const [token, setToken] = useState('');
+    const [clockInData, setClockInData] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('time-token');
@@ -27,13 +28,42 @@ export default function Analytics() {
                 }
 
                 const data = await res.json();
+
+                console.log(data)
                 setUser(data);
             } catch (error) {
                 console.error(error);
             }
         };
 
+        const fetchClockInData = async () => {
+            let email = user.Email;
+            try {
+                const res = await fetch(`../api/user/get-clockin-data`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify({ email }),
+                });
+
+                if (!res.ok) {
+                    throw new Error('An error occurred. Please try again');
+                }
+
+                const data = await res.json();
+
+                console.log(data)
+                setClockInData(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
         fetchUser();
+        fetchClockInData();
     }, []);
 
     const handleLogOut = () => {
