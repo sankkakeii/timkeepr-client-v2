@@ -8,6 +8,8 @@ export default function Analytics() {
     const [token, setToken] = useState('');
     const [clockInData, setClockInData] = useState(null);
 
+    const email = user.email;
+
     useEffect(() => {
         const token = localStorage.getItem('time-token');
         setToken(token);
@@ -29,7 +31,6 @@ export default function Analytics() {
 
                 const data = await res.json();
 
-                console.log(data.email)
                 setUser(data);
             } catch (error) {
                 console.error(error);
@@ -37,7 +38,8 @@ export default function Analytics() {
         };
 
         const fetchClockInData = async () => {
-            let email = user.email;
+            const token = localStorage.getItem('time-token');
+            
             try {
                 const res = await fetch(`../api/user/get-clockin-data`, {
                     method: 'POST',
