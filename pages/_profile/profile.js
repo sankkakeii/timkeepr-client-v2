@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import Link from 'next/Link';
 
 export default function UserProfile() {
     const [user, setUser] = useState(null);
@@ -10,9 +11,9 @@ export default function UserProfile() {
     const [token, setToken] = useState('');
 
     useEffect(() => {
-
         const token = localStorage.getItem('time-token');
         setToken(token);
+
         const fetchUser = async () => {
             try {
                 // const res = await fetch(`${process.env.NEXT_PUBLIC_TIMEKEEPR_API}user/get-cuser`, {
@@ -93,7 +94,7 @@ export default function UserProfile() {
                     <div className="w-full flex flex-col space-y-4">
                         <button className="bg-blue-500 hover:bg-blue-700 w-full rounded-lg text-white font-medium py-2">Request Break</button>
                         <button onClick={handleClockOut} className="bg-red-500 hover:bg-red-700 w-full rounded-lg text-white font-medium py-2">Clock Out</button>
-                        <button className="bg-yellow-500 hover:bg-yellow-700 w-full rounded-lg text-white font-medium py-2">Analytics</button>
+                        <Link><button className="bg-yellow-500 hover:bg-yellow-700 w-full rounded-lg text-white font-medium py-2">Analytics</button></Link>
                         <button onClick={handleLogOut} className="bg-gray-500 hover:bg-gray-700 w-full rounded-lg text-white font-medium py-2">Logout</button>
                     </div>
                 </div>
