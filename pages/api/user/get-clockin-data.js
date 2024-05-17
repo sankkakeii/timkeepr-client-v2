@@ -6,6 +6,8 @@ export default async function handler(req, res) {
     }
 
     const { email } = req.body;
+    console.log('here')
+    console.log(email)
     const token = req.headers.authorization.replace('Bearer ', '');
 
     try {
