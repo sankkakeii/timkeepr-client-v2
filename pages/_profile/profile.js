@@ -8,7 +8,7 @@ export default function UserProfile() {
     const [user, setUser] = useState(null);
     const [email, setEmail] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const router = useRouter();
+d    const router = useRouter();
 
 
     useEffect(() => {
