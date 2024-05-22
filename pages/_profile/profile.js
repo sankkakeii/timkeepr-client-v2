@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Spinner from '../../components/spinner.jsx';
 
 export default function UserProfile() {
     const [user, setUser] = useState(null);
@@ -75,7 +76,9 @@ export default function UserProfile() {
     };
 
     if (!user) {
-        return <div>Loading</div>;
+        return <div className="flex justify-center items-center h-screen bg-gray-400">
+        <Spinner className="" />
+    </div>
     }
 
     return (

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
+import Spinner from '../../components/spinner.jsx';
 
 export default function Analytics() {
     const router = useRouter();
@@ -20,7 +21,7 @@ export default function Analytics() {
 
         const fetchUser = async () => {
             try {
-                const res = await fetch(`../api/user/fetch-cuser`, {
+                const res = await fetch('../api/user/fetch-cuser', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -42,6 +43,12 @@ export default function Analytics() {
 
         fetchUser();
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            fetchClockInData();
+        }
+    }, [user]);
 
     const fetchClockInData = async () => {
         try {
@@ -83,10 +90,14 @@ export default function Analytics() {
         });
 
         const total = lateCount + onTimeCount;
-        setLatenessRatio({
-            late: (lateCount / total) * 100,
-            onTime: (onTimeCount / total) * 100
-        });
+        if (total > 0) {
+            setLatenessRatio({
+                late: (lateCount / total) * 100,
+                onTime: (onTimeCount / total) * 100
+            });
+        } else {
+            setLatenessRatio({ late: 0, onTime: 0 });
+        }
     };
 
     const handleLogOut = () => {
@@ -104,7 +115,9 @@ export default function Analytics() {
     };
 
     if (!user) {
-        return <div>Loading...</div>;
+        return <div className="flex justify-center items-center h-screen bg-gray-400">
+            <Spinner className="" />
+        </div>;
     }
 
     const data = {
@@ -163,4 +176,3 @@ export default function Analytics() {
         </main>
     );
 }
-
