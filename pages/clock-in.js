@@ -55,7 +55,6 @@ const ClockIn = () => {
             }
         };
 
-
         fetchCurrentUser();
         fetchOrganizationClock();
         return () => {
@@ -133,7 +132,6 @@ const ClockIn = () => {
         }
     };
 
-
     return (
         <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
@@ -147,10 +145,10 @@ const ClockIn = () => {
                     {responseMessage && <div className="text-lg text-center font-semibold text-green-600 my-3">{responseMessage}</div>}
                     {errorMessage && <p className="text-red-500 text-center my-3">{errorMessage}</p>}
                     <div className="mt-5 w-1/2">
-                        <button onClick={clockIn} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${clockInLoading ? 'pointer-events-none disabled' : ''}`}>
+                        <button onClick={clockIn} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2`} disabled={clockInLoading}>
                             {clockInLoading ? <Spinner /> : "Clock In"}
                         </button>
-                        <button onClick={clockOut} className={`mt-3 bg-red-500 hover:bg-red-700 w-full rounded-lg text-white font-medium py-2 ${clockOutLoading ? 'pointer-events-none disabled' : ''}`}>
+                        <button onClick={clockOut} className={`mt-3 bg-red-500 hover:bg-red-700 w-full rounded-lg text-white font-medium py-2`} disabled={clockOutLoading}>
                             {clockOutLoading ? <Spinner /> : "Clock Out"}
                         </button>
                     </div>
@@ -161,3 +159,4 @@ const ClockIn = () => {
 };
 
 export default ClockIn;
+
