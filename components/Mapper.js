@@ -96,50 +96,57 @@ function Mapper() {
   }
 
   return (
-    <div className="flex flex-col items-center space-y-4 p-4">
+    <div className="flex flex-col space-y-4 p-4">
       <LoadScript
         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}
         libraries={LIBRARIES}
       >
-        <div className="slider-container flex flex-col items-center space-y-2">
-          <input
-            type="range"
-            min="10"
-            max="1000"
-            value={radius}
-            onChange={handleRadiusChange}
-            className="slider w-full h-1 bg-gray-200 rounded-full outline-none transition-colors duration-200 ease-in-out hover:bg-blue-400 active:bg-blue-500 focus:bg-blue-500"
-          />
+        <div className="flex gap-5">
+          <div className="flex flex-col gap-2">
+          <div className="slider-container flex flex-col gap-3 my-3">
+            <div className="flex flex-col gap-1">
+              <p className="text-sm font-semibold text-gray-900">Radius: {radius} meters</p>
+              <input
+                type="range"
+                min="10"
+                max="1000"
+                value={radius}
+                onChange={handleRadiusChange}
+                className="slider w-full h-1 bg-gray-200 rounded-full outline-none transition-colors duration-200 ease-in-out hover:bg-blue-400 active:bg-blue-500 focus:bg-blue-500"
+              />
+            </div>
 
-          <div className="text-sm">Radius: {radius} meters</div>
+            <TimePicker
+              onChange={handleTimeChange}
+              value={timeValue}
+            />
+          </div>
 
-          <TimePicker
-            onChange={handleTimeChange}
-            value={timeValue}
-          />
-          <button onClick={sendDataToApi} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${loading ? 'pointer-events-none disabled' : ''}`}>
-            {loading ? <Spinner /> : "Submit"}
-          </button>
+
+            <GoogleMap mapContainerStyle={{ width: "400px", height: "220px" }} center={center} zoom={18} className="rounded">
+              <Marker position={center} />
+              <Circle
+                center={center}
+                options={{
+                  strokeColor: "#4ce24c",
+                  strokeOpacity: 0.8,
+                  strokeWeight: 1.5,
+                  fillColor: " #46dd46",
+                  fillOpacity: 0.35,
+                  clickable: true,
+                  draggable: true,
+                  editable: false,
+                  visible: true,
+                  zIndex: 1,
+                  radius: radius
+                }}
+              />
+            </GoogleMap>
+            <button onClick={sendDataToApi} className={`bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2 ${loading ? 'pointer-events-none disabled' : ''}`}>
+              {loading ? <Spinner /> : "Submit"}
+            </button>
+          </div>
         </div>
-        <GoogleMap mapContainerStyle={{ width: "400px", height: "220px" }} center={center} zoom={18} className="rounded">
-          <Marker position={center} />
-          <Circle
-            center={center}
-            options={{
-              strokeColor: "#4ce24c",
-              strokeOpacity: 0.8,
-              strokeWeight: 1.5,
-              fillColor: " #46dd46",
-              fillOpacity: 0.35,
-              clickable: true,
-              draggable: true,
-              editable: false,
-              visible: true,
-              zIndex: 1,
-              radius: radius
-            }}
-          />
-        </GoogleMap>
       </LoadScript>
     </div>
   );

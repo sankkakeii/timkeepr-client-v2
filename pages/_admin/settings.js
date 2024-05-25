@@ -5,7 +5,7 @@ import { useState } from "react";
 import MapArea from "../../components/MapArea";
 import styles from "../../styles/Home.module.css";
 
-export default function Home() {
+export default function Admin() {
 
   const [coordinates, setCoordinates] = useState({
     lat: 2.996576908645812,
@@ -13,42 +13,45 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-200 py-6 flex flex-col justify-center">
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-200">
       <Head>
-        <title>Timekeepr App</title>
-        <meta name="description" content="A simple time tracking application." />
+        <title>Admin - Timekeepr App</title>
+        <meta name="description" content="Admin panel for Timekeepr App." />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div className="relative px-4 py-5 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-          <h1 className="text-2xl font-extrabold text-center mb-5 text-gray-500">Timekeepr</h1>
-          <MapArea></MapArea>
-          <div className="flex justify-center mt-4">
-            <Link href="/_admin/add-user">
-              <a className="mx-2 py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Add User</a>
-            </Link>
-            <Link href="/_admin/view-users">
-              <a className="mx-2 py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">View Users</a>
-            </Link>
+      <aside className="w-full md:w-64 bg-white shadow-md md:h-screen">
+        <div className="p-4">
+          <h1 className="text-2xl font-extrabold mb-5 text-gray-500">Timekeepr</h1>
+        </div>
+        <nav className="mt-8">
+          <ul>
+            <li>
+              <Link href="/_admin/add-user">
+                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">Add User</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/_admin/view-users">
+                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">View Users</a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/_admin/settings">
+                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">Settings</a>
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main className="flex-1 p-6">
+        <div className="py-3">
+          <div className="relative px-4 py-5 bg-white shadow-lg sm:rounded-3xl w-fit">
+            <MapArea></MapArea>
           </div>
         </div>
       </main>
-
-      <footer className="mt-8 text-center">
-        <a
-          href=""
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sm text-gray-600"
-        >
-          Timekeepr 2023{" "}
-          <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-          </span>
-        </a>
-      </footer>
     </div>
   );
 }

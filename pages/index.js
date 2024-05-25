@@ -75,7 +75,7 @@ export default function Login() {
             </div>
             {error && <p className="text-red-500">{error}</p>}
             <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">
-              {loading ? <Spinner /> : 'Sign in'} {/* Show spinner if loading state is true */}
+              {loading ? <Spinner /> : 'Sign in'}
             </button>
           </form>
         </div>

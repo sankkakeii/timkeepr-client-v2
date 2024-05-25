@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import Mapper from "./Mapper";
-import Autocompletor from "./Autocompletor";
+import Autocompletion from "./Autocompletion";
 
 
 
 function MapArea({ coordinates, setCoordinates }) {
   return (
     <>
-    <Autocompletor></Autocompletor>
+    {/* <Autocompletion></Autocompletion> */}
     <Mapper></Mapper>
     </>
   );
