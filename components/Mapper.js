@@ -92,7 +92,7 @@ function Mapper() {
   };
 
   if (!center) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (
