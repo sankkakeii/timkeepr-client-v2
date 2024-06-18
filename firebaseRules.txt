@@ -1,0 +1,63 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /usersProfile/{userId} {
+      // Allow the backend to update the user profile if the custom claim "provider" is set to "google", "facebook", or "github".
+      allow update: if request.auth.uid != null && (request.auth.token.provider == "google" || request.auth.token.provider == "facebook" || request.auth.token.provider == "github");
+      
+      // Allow the user to update their own profile directly (e.g., using the app UI).
+      allow update: if request.auth.uid == userId;
+      
+      // Allow the user to delete their own profile directly (if needed).
+      allow delete: if request.auth.uid == userId;
+
+      // Allow authenticated users to read the user profiles.
+      allow read: if request.auth.uid != null;
+
+      // Allow authenticated users to create new user profiles.
+      allow create: if request.auth.uid != null;
+    }
+    
+    match /organizations/{organizationId} {
+      // Allow authenticated users to read organization documents.
+      allow read: if request.auth.uid != null;
+
+      // Allow the user who created the organization or users in the organization to update or delete it.
+      allow read, update, delete: if request.auth.uid != null &&
+        (request.auth.uid == resource.data.createdBy || request.auth.uid in resource.data.users);
+
+      // Allow authenticated users to create new organizations.
+      allow create: if request.auth.uid != null;
+    }
+    
+    match /pendingUsers/{userId} {     
+    	// Allow authenticated users create pending users
+    	allow create: if request.auth.uid != null;
+      // Allow authenticated users to read the user profiles.
+      allow read: if request.auth.uid != null;
+      
+      // Allow the user who created the pending user or users in the organization to update or delete it.
+      allow read, update, delete: if request.auth.uid != null &&
+        (request.auth.uid == resource.data.createdBy);
+    }
+    
+    match /teams/{teamId} {
+      // Allow authenticated users (creator or members) to read, update, or delete team documents.
+      allow read, update, delete: if request.auth.uid != null &&
+        (request.auth.uid == resource.data.createdBy || request.auth.uid in resource.data.members);
+
+      // Allow authenticated users to create new teams.
+      allow create: if request.auth.uid != null;
+
+      // Include rules for the members subcollection
+      match /members/{memberId} {
+        allow read, write: if request.auth.uid != null;
+      }
+      
+      // Include rules for the tasks subcollection
+      match /tasks/{taskId} {
+        allow read, write: if request.auth.uid != null;
+      }
+    }
+  }
+}

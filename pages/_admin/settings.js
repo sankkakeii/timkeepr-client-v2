@@ -1,57 +1,108 @@
-import Head from "next/head";
-import Link from 'next/link';
-import Image from "next/image";
-import { useState } from "react";
-import MapArea from "../../components/MapArea";
-import styles from "../../styles/Home.module.css";
+import React, { useEffect, useState } from 'react';
+import SEO from '@/components/Modular/SEO';
+import globalConfig from '@/globalConfig';
+import { Spinner } from '@/components/ui/spinner';
+import { useAuth } from '@/context/AuthUserContext';
+import Layout from '@/components/layout/Layout';
+import { UpdateProfile } from '@/components/Modular/admin/SettingsComponents/UpdateProfile';
+import { UpdateEmail } from '@/components/Modular/admin/SettingsComponents/UpdateEmail'
+import { ResetPassword } from '@/components/Modular/admin/SettingsComponents/ResetPassword';
+import SubscriptionDetails from '@/components/Modular/admin/SettingsComponents/SubscriptionDetails';
+import OrganizationDetails from '@/components/Modular/admin/SettingsComponents/OrganizationDetails';
 
-export default function Admin() {
+export default function Settings() {
+    const { authUser, loading: authLoading } = useAuth();
+    const [loading, setLoading] = useState(true);
+    const [activeTab, setActiveTab] = useState('profile');
 
-  const [coordinates, setCoordinates] = useState({
-    lat: 2.996576908645812,
-    lng: 101.59493478782426,
-  });
+    useEffect(() => {
+        if (!authLoading) {
+            setLoading(false);
+        }
+    }, [authUser, authLoading]);
 
-  return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gray-200">
-      <Head>
-        <title>Admin - Timekeepr App</title>
-        <meta name="description" content="Admin panel for Timekeepr App." />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+    };
 
-      <aside className="w-full md:w-64 bg-white shadow-md md:h-screen">
-        <div className="p-4">
-          <h1 className="text-2xl font-extrabold mb-5 text-gray-500">Timekeepr</h1>
-        </div>
-        <nav className="mt-8">
-          <ul>
-            <li>
-              <Link href="/_admin/add-user">
-                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">Add User</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/_admin/view-users">
-                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">View Users</a>
-              </Link>
-            </li>
-            <li>
-              <Link href="/_admin/settings">
-                <a className="block px-4 py-2 text-gray-600 hover:bg-gray-100">Settings</a>
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-80">
+                <Spinner />
+            </div>
+        );
+    }
 
-      <main className="flex-1 p-6">
-        <div className="py-3">
-          <div className="relative px-4 py-5 bg-white shadow-lg sm:rounded-3xl w-fit">
-            <MapArea></MapArea>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
+    return (
+        <>
+            <SEO
+                title="Settings"
+                description="settings page"
+                canonical={globalConfig.site.siteUrl}
+                openGraph={{
+                    url: `${globalConfig.site.siteUrl}`,
+                }}
+            />
+            <h1 className="text-3xl py-5 font-bold">Settings</h1>
+            <div className="flex justify-between items-center border-b border-muted">
+                <div className="flex space-x-8">
+                    <button
+                        className={`text-md ${activeTab === 'profile' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-700'
+                            } hover:text-green-400`}
+                        onClick={() => handleTabChange('profile')}
+                    >
+                        Profile
+                    </button>
+                    <button
+                        className={`text-md ${activeTab === 'subscription' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-700'
+                            } hover:text-green-400`}
+                        onClick={() => handleTabChange('subscription')}
+                    >
+                        Subscription
+                    </button>
+
+                    <button
+                        className={`text-md ${activeTab === 'organization' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-700'
+                            } hover:text-green-400`}
+                        onClick={() => handleTabChange('organization')}
+                    >
+                        Manage Permissions
+                    </button>
+                </div>
+            </div>
+            <div id="active-tab" className="mt-4">
+                {/* Render different setting options based on the active tab */}
+                {activeTab === 'profile' && <ProfileSettings />}
+                {activeTab === 'subscription' && <SubscriptionSettings />}
+                {activeTab === 'organization' && <ManageOrganization />}
+            </div>
+        </>
+    );
 }
+
+const ProfileSettings = () => {
+    // Render profile settings here
+    return (<div id="profile" className="pt-5 pb-10">
+        <UpdateProfile />
+        <UpdateEmail />
+        <ResetPassword />
+    </div>);
+};
+
+const SubscriptionSettings = () => {
+    // Render subscription settings here
+    return <div id="subscription" className="pt-5 pb-10">
+        <SubscriptionDetails />
+    </div>;
+};
+
+const ManageOrganization = () => {
+    // Render subscription settings here
+    return <div id="organization" className="pt-5 pb-10">
+        <OrganizationDetails />
+    </div>;
+};
+
+
+
+Settings.layout = Layout;

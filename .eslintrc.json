@@ -1,3 +1,22 @@
 {
-  "extends": "next/core-web-vitals"
+    "plugins": [],
+    "extends": [
+        "airbnb",
+        "next/core-web-vitals",
+        "prettier"
+    ],
+    "parser": "babel-eslint",
+    "overrides": [
+        {
+            "files": [
+                "*.js",
+                "*.jsx"
+            ],
+            "parserOptions": {
+                "project": [
+                    "./jsconfig.json"
+                ]
+            }
+        }
+    ]
 }

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import { Pie } from 'react-chartjs-2';
 import 'chart.js/auto';
-import Spinner from '../../components/spinner.jsx';
+import Spinner from '@/components/ui/spinner';
 
 export default function Analytics() {
     const router = useRouter();
@@ -135,41 +135,45 @@ export default function Analytics() {
     return (
         <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-            <div className="relative rounded-xl shadow-2xl overflow-hidden w-full max-w-xl">
+            <div className="relative rounded-xl shadow-2xl overflow-hidden w-3/4">
                 <div className="flex flex-col items-center justify-center py-8 px-6 bg-white sm:rounded-3xl sm:p-6">
                     <h2 className="text-3xl font-bold text-gray-800 mb-4">Timekeepr</h2>
                     <h1 className="text-2xl font-semibold text-gray-800 mb-4">Analytics</h1>
                     <button onClick={fetchClockInData}>Refresh</button>
-                    <table className="min-w-full bg-white">
-                        <thead>
-                            <tr>
-                                <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Day</th>
-                                <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Clocked In</th>
-                                <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Clock In Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {clockInData ? (
-                                clockInData.map((entry, index) => (
-                                    <tr key={index}>
-                                        <td className="py-2 px-4 border-b border-gray-200">{formatDate(entry.date)}</td>
-                                        <td className="py-2 px-4 border-b border-gray-200">{entry.clockedIn ? 'Yes' : 'No'}</td>
-                                        <td className="py-2 px-4 border-b border-gray-200">{entry.timestamps.length > 0 ? formatTime(entry.timestamps[0].clockInTime) : '-'}</td>
-                                    </tr>
-                                ))
-                            ) : (
+
+                    <div className="w-full flex gap-5">
+                        <table className="w-1/2 bg-white">
+                            <thead>
                                 <tr>
-                                    <td className="py-2 px-4 border-b border-gray-200" colSpan="3">No data available</td>
+                                    <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Day</th>
+                                    <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Clocked In</th>
+                                    <th className="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600">Clock In Time</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                    <div className="w-full mt-6 flex flex-col gap-3 items-center justify-center">
-                        <h2 className="text-xl font-semibold text-gray-800 mb-4">Lateness Ratio</h2>
-                        <div className="w-[200px] h-[200px]">
-                            <Pie className="" data={data} />
+                            </thead>
+                            <tbody>
+                                {clockInData ? (
+                                    clockInData.map((entry, index) => (
+                                        <tr key={index}>
+                                            <td className="py-2 px-4 border-b border-gray-200">{formatDate(entry.date)}</td>
+                                            <td className="py-2 px-4 border-b border-gray-200">{entry.clockedIn ? 'Yes' : 'No'}</td>
+                                            <td className="py-2 px-4 border-b border-gray-200">{entry.timestamps.length > 0 ? formatTime(entry.timestamps[0].clockInTime) : '-'}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td className="py-2 px-4 border-b border-gray-200" colSpan="3">No data available</td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                        <div className="mt-6 flex flex-col gap-3 items-center justify-center">
+                            <h2 className="text-xl font-semibold text-gray-800 mb-4">Lateness Ratio</h2>
+                            <div className="w-[200px] h-[200px]">
+                                <Pie className="" data={data} />
+                            </div>
                         </div>
                     </div>
+
                     <button onClick={handleLogOut} className="bg-gray-500 hover:bg-gray-700 w-full rounded-lg text-white font-medium py-2 mt-4">Logout</button>
                 </div>
             </div>

@@ -1,132 +1,47 @@
-import { useState, useEffect } from 'react';
-import Spinner from '../components/spinner';
+import Nav from '@/components/Modular/LandingContent/LandingNav'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import SEO from '@/components/Modular/SEO';
+import globalConfig from '@/globalConfig';
+import Image from 'next/image';
+import Footer from '@/components/Modular/LandingContent/Footer';
 
-
-export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-  const [token, setToken] = useState('');
-  const [loading, setLoading] = useState(false);
-
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  useEffect(() => {
-    localStorage.setItem('time-token', token);
-  }, [token]);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true); // Set loading state to true when form is submitted
-
-    try {
-      const res = await fetch(`api/user/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (res.status === 401) {
-        setError('Unauthorized access. Please check your credentials');
-        setLoading(false); // Set loading state to false after response is received
-        return;
-      }
-
-      const data = await res.json();
-
-      if (data.auth) {
-        setToken(data.token);
-        window.location.href = '/clock-in';
-      } else {
-        setError('Something went wrong. Please try again');
-        setLoading(false); // Set loading state to false after response is received
-      }
-    } catch (error) {
-      setError('An error occurred. Please try again');
-      setLoading(false); // Set loading state to false after response is received
-    }
-  };
-
+export default function Home() {
   return (
-    <main className="h-screen flex items-center justify-center bg-gray-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-light-blue-500 shadow-lg transform skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-      <div className="relative rounded-xl shadow-2xl overflow-hidden w-full max-w-md">
-        <div className="flex flex-col items-center justify-center py-8 px-6 bg-white sm:rounded-3xl sm:p-20">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Timekeepr</h2>
-          <div className="text-gray-600 text-center mb-6">
-            <h1 className="text-xl font-semibold">Welcome back!</h1>
-            <p>Sign in to access your account</p>
+    <>
+      <SEO
+        title="Timekeepr"
+        description="Landing page"
+        canonical={globalConfig.site.siteUrl}
+        openGraph={{
+          url: `${globalConfig.site.siteUrl}/`,
+        }}
+      />
+      <main className="flex flex-col h-full justify-center items-center">
+        <Nav />
+        <section className="flex gap-7 mt-20 p-4 lg:p-10 justify-center items-center text-center">
+          <Image
+            src="/images/clock2.jpg"
+            width={250}
+            height={250}
+            alt="Home Image"
+            className="rounded-2xl"
+          />
+          <div className="flex flex-col gap-7 text-left">
+            <h1 className="text-4xl font-bold">
+              Manage your <span className="">staff</span> with ease
+            </h1>
+            <p className="text-xl lg:text-1xl text-muted-foreground">
+              Track work efficiently with Timekeepr <br /> Get individual staff data on the fly
+            </p>
+            <div className="flex lg:flex-row gap-6">
+              {/* <Button variant={'outline'}><Link href={'/'}>View Template</Link></Button> */}
+              <Button><Link href={'/auth/sign-up'}>Get Started</Link></Button>
+            </div>
           </div>
-          <form className="w-full" onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">Your email</label>
-              <input type="email" name="email" id="email" className="border border-gray-300 rounded-lg focus:border-green-500 w-full px-4 py-2" placeholder="name@company.com" required="" value={email} onChange={e => setEmail(e.target.value)} />
-            </div>
-            {/* <div className="mb-4">
-              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">Password</label>
-              <input type="password" name="password" id="password" className="border border-gray-300 rounded-lg focus:border-green-500 w-full px-4 py-2" placeholder="••••••••" required="" value={password} onChange={e => setPassword(e.target.value)} />
-            </div> */}
-
-            <div className="mb-4">
-              <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-700">Password</label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  id="password"
-                  className="border border-gray-300 rounded-lg focus:border-green-500 w-full px-4 py-2 pr-10"
-                  placeholder="••••••••"
-                  required
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
-                >
-                  {/* {showPassword ? (
-                    <svg className="h-5 w-5 text-gray-700" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  ) : (
-                    <svg className="h-5 w-5 text-gray-700" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825a9.003 9.003 0 01-7.95-7.95m-.85-2.8A9.003 9.003 0 0112 5.25a9.003 9.003 0 017.95 4.825m1.102 2.8A9.003 9.003 0 0112 18.75a9.003 9.003 0 01-7.95-4.825m-1.102-2.8c1.274-4.057 5.064-7 9.542-7 4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13.875 18.825a9.003 9.003 0 01-7.95-7.95m-.85-2.8A9.003 9.003 0 0112 5.25a9.003 9.003 0 017.95 4.825m1.102 2.8A9.003 9.003 0 0112 18.75a9.003 9.003 0 01-7.95-4.825m-1.102-2.8c1.274-4.057 5.064-7 9.542-7 4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                  )} */}
-                  <svg className="h-5 w-5 text-gray-700" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
-                  </svg>
-
-                </button>
-              </div>
-            </div>
-
-
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <input id="remember" type="checkbox" className="mr-2 cursor-pointer" />
-                <label htmlFor="remember" className="text-sm text-gray-500">Remember me</label>
-              </div>
-              <a href="#" className="text-sm text-green-500 hover:underline">Forgot password?</a>
-            </div>
-            {error && <p className="text-red-500">{error}</p>}
-            <button type="submit" className="bg-green-500 hover:bg-green-700 w-full rounded-lg text-white font-medium py-2">
-              {loading ? <Spinner /> : 'Sign in'}
-            </button>
-          </form>
-        </div>
-      </div>
-    </main>
-  )
+        </section>
+        <Footer />
+      </main>
+    </>
+  );
 }
